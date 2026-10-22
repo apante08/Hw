@@ -1,3 +1,32 @@
+/**
+ * Author: Alexandros Panteli
+ * Written: 05/10/2026
+ * Last updated: 22/10/2026
+ * Compilation command: javac -classpath .:stdlib.jar PasswordSecurity.java
+ * Execution command: java -classpath .:stdlib.jar PasswordSecurity
+ * 
+ * To programma exei 5 sinolika litourgies:
+ * 
+ *  Leitourgia 1: Dimiourga ena tixaio kainourio password simfona me
+ *  kapoies proipotheseis.
+ * 
+ *  Leitourgia 2: Elegxei an enas kodikos einai dinatos kai se periptosi
+ *  pou den einai perigrafei ti tou lipei.
+ * 
+ *  Leitourgia 3: Ipologizei tous sinolikous pithanous sindiasmous kodikon
+ *  me vasi to ti omades xaraktiron perilambanei enas kodikos.
+ * 
+ *  Leitourgia 4: Kanei ektimisi to xronou pou tha xreiastei gia
+ *  na paraviastei enas kodikos.
+ * 
+ *  Leitourgia 5: Den tin ekana giati den ksero pos.
+ * 
+ *  Leitourgia 6: Dimiourga ena tixaio memorable passphrase
+ *  me vasi kapoies proipotheseis xreisimopoiontas lekseis
+ *  apo ena prokathorismeno pinaka String.
+ * 
+ */
+
 public class PasswordSecurity{
 
     final static String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
@@ -8,7 +37,11 @@ public class PasswordSecurity{
     
     final static String SPECIAL = "!@#$%^&*()-_=+[]{}|;:',.<>?/`~\"\\";
 
-    public static String generate_password (int length, boolean use_lowercase, boolean use_uppercase, boolean use_digits, boolean use_special_chars){
+    /*/
+        Dilono ena string me kathe xaraktira apo kathe omada.
+    /*/
+
+    public static String generatePassword (int length, boolean use_lowercase, boolean use_uppercase, boolean use_digits, boolean use_special_chars){
 
         int lengthNeeded = 0;
         if(use_lowercase) lengthNeeded++;
@@ -17,52 +50,66 @@ public class PasswordSecurity{
         if(use_special_chars) lengthNeeded++;
 
         /*/
-        Ελέγχω αν υπάρχει τουλάχιστον ένα κρητήριο και 
-        αν τα διαφορετικά κρητήρια είναι περισσότερα 
-        από μέγεθος που ζητήθηκε.
+            Ipologizo to elaxisto megethos pou xreiazetai to string.
         /*/
 
         if(lengthNeeded == 0){
-            return "Σφάλμα: Πρέπει να επιλεγεί τουλάχιστον ένας τύπος χαρακτήρων!";
+            return "Error: At least one character type must be selected!";
         }
 
         if(length < lengthNeeded){
-            return "Σφάλμα: Το μήκος είναι πολύ μικρό για να συμπεριλάβει όλους τους επιλεγμένους τύπους χαρακτήρων!";
+            return "Error: The length is too short to include all character types!";
         }
 
-        char[] password = new char[length];
-        
         /*/
-        Δημιουργώ μια μεταβλητή τύπου StringBuilder (Για διευκόλυνση στην τροποποίησή του και 
-        στο ανακάτεμμα) και προσθέτω αρχικά έναν χαρακτήρα από το κάθε κρητήριο.
+            Elegxo an epilexthike toulaxisto enas xaraktiras kai an to
+            megethos pou zitithike einai mikrotero apo to megethos pou
+            xreiazete to password.
+        /*/
+
+        char[] password = new char[length];
+
+        /*/
+            Dilono enan adio pinaka char gia na dimiourgiso ton 
+            kainourgio kodiko.
         /*/
 
         int index = 0;
 
         String allChars = "";
         if(use_lowercase){
-            password[index++] = LOWERCASE.charAt((int)((LOWERCASE.length() + 1)* Math.random()));
+            password[index++] = LOWERCASE.charAt((int)(LOWERCASE.length() * Math.random()));
             allChars += LOWERCASE;
         }
 
         if(use_uppercase){
-            password[index] = UPPERCASE.charAt((int)((UPPERCASE.length() + 1)* Math.random()));
+            password[index++] = UPPERCASE.charAt((int)(UPPERCASE.length() * Math.random()));
             allChars += UPPERCASE;
         }
 
         if(use_digits){
-            password[index++] = DIGITS.charAt((int)((DIGITS.length() + 1)* Math.random()));
+            password[index++] = DIGITS.charAt((int)(DIGITS.length() * Math.random()));
             allChars += DIGITS;
         }
 
         if(use_special_chars){
-            password[index++] = SPECIAL.charAt((int)((SPECIAL.length() + 1)* Math.random()));
+            password[index++] = SPECIAL.charAt((int)(SPECIAL.length() * Math.random()));
             allChars += SPECIAL;
         }
 
+        /*/
+            Prota vazo enan xaraktira apo kathe omada xaraktiron pou
+            epilextike sto String. Kai prostheto se enan pinaka.
+        /*/
+
         for(int i = lengthNeeded; i < length; i ++){
-            password[index++] = allChars.charAt((int)((allChars.length() + 1) * Math.random()));
+            password[i] = allChars.charAt((int)(allChars.length() * Math.random()));
         }
+
+        /*/
+            Gemizo to ipolipo string me ta epitrepomena grammata simfona
+            me tis proipotheseis.
+        /*/
 
         for(int i = 0; i < length; i ++){
             int r = i + (int)((length - i) * Math.random());
@@ -72,8 +119,7 @@ public class PasswordSecurity{
         }
 
         /*/
-        Ανακατεύω τον κωδικό που δημιούργησα και τον
-        επιστρέφω.
+            Telos anakatevo ton kodiko kai ton epistrefo.
         /*/
 
         String generatedPassword = new String(password);
@@ -81,7 +127,7 @@ public class PasswordSecurity{
 
     }
 
-    public static String enforce_strong_password_requirements (String password){
+    public static String enforceStrongPasswordRequirements (String password){
         
         Boolean atLeast8Char = true;
         Boolean hasLowerCase = false;
@@ -91,6 +137,10 @@ public class PasswordSecurity{
 
         if(password.length() < 8) atLeast8Char = false;
 
+        /*/
+            Elegxo an o kodikos pou dothike einai toulaxisto 8 xaraktires.
+        /*/
+
         for(int i = 0; i < password.length(); i ++){
             if(LOWERCASE.indexOf(password.charAt(i)) != -1) hasLowerCase = true;
             if(UPPERCASE.indexOf(password.charAt(i)) != -1) hasUpperCase = true;
@@ -98,22 +148,32 @@ public class PasswordSecurity{
             if(SPECIAL.indexOf(password.charAt(i)) != -1) hasSpecialChar = true;
         }
 
-        String message = "O kodikos prosvasis sas einai isxyros\nkai plhrei oles tis apaithseis";
+        /*/
+            Elegxo an o kodikos pou dothike perilambanei enan xaraktira 
+            apo kathe omada xaraktiron.
+        /*/
+
+        String message = "Your password is strong and meets all requirements!";
 
         if(!(atLeast8Char && hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar))
-            message = "O kodikos prosvasis sas:";
+            message = "Your password is missing:";
         
-        if(!atLeast8Char) message += "\n- Einai mikroteros apo 8 xarakthres";
-        if(!hasLowerCase) message += "\n- Den periexei pezo gramma";
-        if(!hasUpperCase) message += "\n- Den periexei kefalaio gramma";
-        if(!hasDigit) message += "\n- Den periexei psifio";
-        if(!hasSpecialChar) message += "\n- Den periexei eidiko xarakthra";
+        if(!atLeast8Char) message += "\n- Being at least 8 letters";
+        if(!hasLowerCase) message += "\n- At least one lowercase letter";
+        if(!hasUpperCase) message += "\n- At least one uppercase letter";
+        if(!hasDigit) message += "\n- At least one digit";
+        if(!hasSpecialChar) message += "\n- At least one special character";
+
+        /*/
+            Tipono ta katallila minimata analoga me to ti xreiazete o 
+            kodikos prosvasis.
+        /*/
 
         return message;
 
     }
 
-    public static long calculate_possibilities (String password){
+    public static long calculatePossibilities (String password){
 
         boolean hasLowerCase = false;
         boolean hasUpperCase = false;
@@ -127,23 +187,34 @@ public class PasswordSecurity{
             if(SPECIAL.indexOf(password.charAt(i)) != -1) hasSpecialChar = true;
         }
 
+        /*/
+            Elegxo poies omades xaraktiron perilambanei o kodikos.
+        /*/
+
         int character_set_size = 0;
 
         if(hasLowerCase) character_set_size += LOWERCASE.length();
         if(hasUpperCase) character_set_size += UPPERCASE.length();
         if(hasDigit) character_set_size += DIGITS.length();
         if(hasSpecialChar) character_set_size += SPECIAL.length();
-
-        int password_length = password.length();
         
-        long total_possibilities = (long)Math.pow(character_set_size, password_length);
+        /*/
+            Dilono ena adeio string kai to gemizo me tis omades xaraktiron 
+            pou perilambanei o kodikos.
+        /*/
+        
+        long total_possibilities = (long)Math.pow(character_set_size, password.length());
+
+        /*/
+            Ipologizo kai epistrefo tis sinolikes dinatotites tou kodikou.
+        /*/
 
         return total_possibilities;
     }
 
-    public static double[] estimate_password_cracking_time (String password){
+    public static double[] estimatePasswordCrackingTime (String password){
 
-        long total_possibilities = calculate_possibilities(password);
+        long total_possibilities = calculatePossibilities(password);
 
         int guesses_per_second = 1000000;
 
@@ -153,12 +224,21 @@ public class PasswordSecurity{
 
         double[] time = {time_in_seconds, time_in_years};
 
+        /*/
+            Ipologizo ton ektimomeno xrono paraviasis me vasi
+            ton tipo pou dothike stin odigia kai ton epistrefo
+            se ena pinaka double apou stin proti thesi exei ton
+            xrono se defterolepta kai stin defteri exei ton xrono
+            se xronia.
+        /*/
+
         return time;
 
     }
 
-    // public static String dictionary_attack (String target_pasword, String dictionary_file)
-
+    /*/
+        Dilono ton pinaka WORD_LIST.
+    /*/
     private static final String[] WORD_LIST = {
         "apple","brave","cloud","dance","eagle","flame","grace","house",
         "ivory","joker","kneel","lemon","mango","noble","ocean","piano",
@@ -187,28 +267,96 @@ public class PasswordSecurity{
         "latch","mount","notch","pivot","ratchet","shim","zephyr","ash"
         };
 
-    public static String generatePassphrase (int wordCount, String separator, boolean capitalzeEach, boolean appendNumber){
+    public static String generatePassphrase (int wordCount, String separator, boolean capitalizeEach, boolean appendNumber){
         
         if(wordCount < 3) return "Passphrase must contain at least 3 words.";
 
+        /*/
+            Elegxo kai epistrefo to katallilo minima se periptosi pou
+            to wordCount pou zitithike einai mikrotero tou 3 kai stin 
+            periptosi afti tipono to katallilo minima.
+        /*/
+        
         String passPhrase = "";
+
+        /*/
+            Dilono ena adeio String gia na dimiourgiso to passPhrase.
+        /*/
 
         for(int i = 1; i <= wordCount; i ++){
             String temp = WORD_LIST[(int)(Math.random() * WORD_LIST.length)];
-            if(capitalzeEach) Character.toUpperCase(temp.charAt(0));
+            if(capitalizeEach) Character.toUpperCase(temp.charAt(0));
             passPhrase += temp;
             if(i < wordCount) passPhrase += separator;
         }
 
+        /*/
+            Dimiourgo to passphrase prosthetontas WordCount tixaies 
+            lekseis apo ton pinaka WORD_LIST kai an den eimai stin 
+            teleftaia epanalipsi prostheto episis to separator.
+        /*/
+
         if(appendNumber) passPhrase += separator + (10 + (int)(Math.random() * 90));
 
+        /*/
+            Elegxo an zitithike na telionei to passphrase me arithmo
+            kai an zitithike prostheto akoma ena separator kai sto 
+            telos enan tixaio dipsifio arithmo.
+        /*/
+
         return passPhrase;
+
+        /*/
+            Telos epistrefo to passphrase.
+        /*/
     }
 
     public static String generatePassphrase (int wordCount) {
+
+        /*/
+            Dilono mia methodo me to idio onoma me tin proigoumeni
+            etsi oste na kaleitai se periptosi pou dothei mono to
+            wordCount san parametro. Stin periptosi afti to default
+            separator = "-", to default capitalizeEach = true kai 
+            to appendNumber = true.
+        /*/
+        
         return generatePassphrase(wordCount, "-", true, true);
     }
-    public static void main(String[] args){
-        StdOut.println(generate_password(12, true, true, true, true));
+
+    public static void main(String[] args) {
+
+        System.out.println("=== Part 1: Generate Password ===");
+        String pwd = generatePassword(12, true, true, true, true);
+        System.out.println("Generated (12 chars, all types): " + pwd);
+        System.out.println(generatePassword(3, true, true, true, true));
+        System.out.println(generatePassword(8, false, false, false, false));
+
+        System.out.println("\n=== Part 2: Enforce Strong Password Requirements ===");
+        System.out.println(enforceStrongPasswordRequirements("P@ssw0rd"));
+        System.out.println(enforceStrongPasswordRequirements("password"));
+
+        System.out.println("\n=== Part 3: Calculate Password Possibilities ===");
+        long possibilities = calculatePossibilities("P@ssw0rd");
+        System.out.println("Total possible combinations: " + possibilities);
+
+        System.out.println("\n=== Part 4: Estimate Time to Crack ===");
+        double[] times = estimatePasswordCrackingTime("P@ssw0rd");
+        System.out.printf("Estimated time to crack: %.6f seconds (~%.8f years)%n",
+        times[0], times[1]);
+
+        /*/
+            Den ekana tin leitourgia 5 giati den ksero pos na tin kano.
+        /*/
+
+        System.out.println("\n=== Part 6: Generate Memorable Passphrase ===");
+        // 4 words, hyphen-separated, capitalised, with number (default style)
+        System.out.println(generatePassphrase(4));
+        // 3 words, space-separated, lowercase, no number
+        System.out.println(generatePassphrase(3, " ", false, false));
+        // 5 words, underscore-separated, capitalised, with number
+        System.out.println(generatePassphrase(5, "_", true, true));
+        // Error: too few words
+        System.out.println(generatePassphrase(2));
     }
 }
